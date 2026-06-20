@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOMAD360 — Travel Operations Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#0F4C5C;--primary-light:#2C7A7B;--primary-lighter:#3D9B9D;--primary-dark:#0A3A47;--accent:#D97706;--accent-light:#F59E0B;--accent-dark:#B45309;--accent-soft:rgba(217,119,6,0.08);--bg-page:#F8F6F1;--bg-card:#FFFFFF;--bg-hero:#0F4C5C;--bg-surface:#F0EDE6;--bg-muted:#E8E4DC;--bg-warm:#FAF9F6;--text-primary:#1F2937;--text-secondary:#4B5563;--text-muted:#9CA3AF;--text-on-dark:#F0EDE6;--text-bright:#FFFFFF;--text-hero-sub:rgba(240,237,230,0.7);--green:#059669;--green-bg:#ECFDF5;--green-border:#A7F3D0;--yellow:#D97706;--yellow-bg:#FFFBEB;--yellow-border:#FDE68A;--red:#DC2626;--red-bg:#FEF2F2;--red-border:#FECACA;--blue:#2563EB;--blue-bg:#EFF6FF;--blue-border:#BFDBFE;--teal-bg:#F0FDFA;--teal-border:#99F6E4;--border:#E5E1D8;--border-light:#F0EDE6;--shadow-xs:0 1px 2px rgba(31,41,55,0.03);--shadow-sm:0 1px 3px rgba(31,41,55,0.06),0 1px 2px rgba(31,41,55,0.04);--shadow-md:0 4px 6px -1px rgba(31,41,55,0.06),0 2px 4px -1px rgba(31,41,55,0.03);--shadow-lg:0 10px 15px -3px rgba(31,41,55,0.06),0 4px 6px -2px rgba(31,41,55,0.03);--shadow-xl:0 20px 25px -5px rgba(31,41,55,0.07),0 10px 10px -5px rgba(31,41,55,0.02)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg-page);color:var(--text-primary);line-height:1.5;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='500' height='500' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,200 Q80,140 180,170 T400,140' fill='none' stroke='%230F4C5C' stroke-width='0.6'/%3E%3Cpath d='M0,240 Q100,180 220,200 T450,175' fill='none' stroke='%230F4C5C' stroke-width='0.5'/%3E%3Cpath d='M0,280 Q120,220 260,240 T480,215' fill='none' stroke='%230F4C5C' stroke-width='0.4'/%3E%3Cpath d='M0,320 Q140,270 300,280 T500,260' fill='none' stroke='%230F4C5C' stroke-width='0.3'/%3E%3Cpath d='M0,360 Q160,310 340,320 T500,300' fill='none' stroke='%230F4C5C' stroke-width='0.3'/%3E%3Cpath d='M0,160 Q70,100 160,130 T380,105' fill='none' stroke='%230F4C5C' stroke-width='0.5'/%3E%3Cpath d='M0,120 Q60,70 140,90 T350,70' fill='none' stroke='%230F4C5C' stroke-width='0.4'/%3E%3Cpath d='M0,400 Q180,360 360,370 T500,345' fill='none' stroke='%230F4C5C' stroke-width='0.25'/%3E%3C/svg%3E");background-size:500px 500px;opacity:0.02;pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:6px;height:8px}::-webkit-scrollbar-track{background:var(--bg-page)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--primary-light)}::-webkit-scrollbar-corner{background:var(--bg-page)}
+.dashboard-wrapper{position:relative;z-index:1;max-width:1680px;margin:0 auto;padding:0 32px 60px}
+.hero{position:relative;background:linear-gradient(160deg,#072D35 0%,#0A3A47 20%,#0F4C5C 45%,#14626E 70%,#0F4C5C 100%);margin:0 -32px;padding:0;overflow:hidden;min-height:280px}
+.hero-stars{position:absolute;inset:0;opacity:0.12;pointer-events:none}
+.hero-stars span{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%}
+.hero-topo{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='500' height='500' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,200 Q80,140 180,170 T400,140' fill='none' stroke='%23fff' stroke-width='0.8'/%3E%3Cpath d='M0,260 Q100,200 240,220 T460,195' fill='none' stroke='%23fff' stroke-width='0.6'/%3E%3Cpath d='M0,320 Q130,270 280,290 T500,265' fill='none' stroke='%23fff' stroke-width='0.4'/%3E%3Cpath d='M0,140 Q60,80 150,110 T370,85' fill='none' stroke='%23fff' stroke-width='0.5'/%3E%3Cpath d='M0,380 Q160,340 340,350 T500,330' fill='none' stroke='%23fff' stroke-width='0.3'/%3E%3C/svg%3E");background-size:500px 500px;opacity:0.04;pointer-events:none;z-index:1}
+.hero-inner{position:relative;z-index:10;display:flex;align-items:flex-end;justify-content:space-between;padding:44px 32px 90px}
+.hero-left{display:flex;flex-direction:column;gap:8px}
+.hero-brand{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent-light)}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:700;color:var(--text-bright);letter-spacing:0.08em;line-height:1}
+.hero-title .brand-360{color:var(--accent-light);font-weight:500}
+.hero-title .brand-dot{display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%;margin:0 2px;vertical-align:middle;position:relative;top:-4px}
+.hero-subtitle{font-size:14px;font-weight:400;color:var(--text-hero-sub);letter-spacing:0.04em;margin-top:2px}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:16px;color:var(--accent-light);opacity:0.75;margin-top:4px;letter-spacing:0.03em}
+.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.hero-meta{font-size:11px;color:var(--text-hero-sub);letter-spacing:0.04em;text-align:right}
+.hero-meta strong{color:var(--text-bright);font-weight:500}
+.designer-plaque{background:rgba(255,255,255,0.07);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:14px}
+.plaque-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--text-bright);letter-spacing:0.04em;box-shadow:0 0 0 2px rgba(255,255,255,0.15)}
+.plaque-info{display:flex;flex-direction:column;gap:2px}
+.plaque-name{font-size:14px;font-weight:600;color:var(--text-bright);letter-spacing:0.03em}
+.plaque-role{font-size:10px;color:var(--accent-light);letter-spacing:0.08em;text-transform:uppercase;opacity:0.85}
+.hero-mountains{position:absolute;bottom:0;left:0;right:0;height:90px;z-index:5;pointer-events:none}
+.hero-mountains svg{position:absolute;bottom:0;left:0;width:100%;height:90px}
+.dash-nav{display:flex;gap:2px;margin:0 -32px;padding:0 32px;border-bottom:1px solid var(--border);overflow-x:auto;background:var(--bg-card);position:sticky;top:0;z-index:100;box-shadow:var(--shadow-xs)}
+.nav-tab{padding:14px 18px;font-size:11px;font-weight:500;letter-spacing:0.06em;color:var(--text-muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all 0.2s ease;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.nav-tab:hover{color:var(--text-secondary)}
+.nav-tab.active{color:var(--primary);border-bottom-color:var(--accent);font-weight:600}
+.section{display:none;animation:sectionIn 0.4s ease}
+.section.active{display:block}
+@keyframes sectionIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin:32px 0 24px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:12px}
+.title-line{width:28px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-light));border-radius:2px}
+.section-badge{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);background:var(--bg-card);border:1px solid var(--border);padding:5px 14px;border-radius:20px}
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:40px 0;position:relative}
+.section-divider::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;background:var(--accent);border-radius:50%;box-shadow:0 0 0 4px var(--bg-page)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:24px}
+.kpi-grid-4{grid-template-columns:repeat(4,1fr)}.kpi-grid-3{grid-template-columns:repeat(3,1fr)}
+.kpi-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:22px;position:relative;overflow:hidden;transition:all 0.25s ease;box-shadow:var(--shadow-xs);opacity:0;animation:fadeUp 0.5s ease forwards}
+.kpi-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.kpi-card:nth-child(1){animation-delay:0.05s}.kpi-card:nth-child(2){animation-delay:0.1s}.kpi-card:nth-child(3){animation-delay:0.15s}.kpi-card:nth-child(4){animation-delay:0.2s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.kpi-label{font-size:11px;font-weight:500;letter-spacing:0.03em;color:var(--text-muted);margin-bottom:10px}
+.kpi-value{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--text-primary);line-height:1;margin-bottom:6px}
+.kpi-value.primary{color:var(--primary)}.kpi-value.accent{color:var(--accent)}
+.kpi-change{font-size:11px;font-weight:500;display:flex;align-items:center;gap:4px}
+.kpi-change.up{color:var(--green)}.kpi-change.down{color:var(--red)}.kpi-change.neutral{color:var(--text-muted)}
+.kpi-context{font-size:11px;color:var(--text-muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);line-height:1.5}
+.hero-moment{background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:0;margin-bottom:28px;overflow:hidden;box-shadow:var(--shadow-lg);display:grid;grid-template-columns:260px 1fr}
+.hero-gauge-area{background:linear-gradient(135deg,var(--primary-dark),var(--primary));display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;position:relative;overflow:hidden}
+.hero-gauge-area::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,100 Q50,60 120,80 T260,60' fill='none' stroke='%23fff' stroke-width='0.5'/%3E%3Cpath d='M0,150 Q70,110 160,130 T300,110' fill='none' stroke='%23fff' stroke-width='0.4'/%3E%3Cpath d='M0,200 Q90,170 200,185 T300,165' fill='none' stroke='%23fff' stroke-width='0.3'/%3E%3C/svg%3E");opacity:0.05;pointer-events:none}
+.gauge-ring{width:150px;height:150px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.gauge-ring::before{content:'';position:absolute;inset:0;border-radius:50%;border:8px solid rgba(255,255,255,0.08)}
+.gauge-ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.gauge-ring circle{fill:none;stroke-width:8;stroke-linecap:round}
+.gauge-ring .gauge-track{stroke:rgba(255,255,255,0.08)}
+.gauge-ring .gauge-fill{stroke:var(--accent-light);stroke-dasharray:377;stroke-dashoffset:83;transition:stroke-dashoffset 1.5s ease}
+.gauge-ring .gauge-fill.pulse{animation:gaugePulse 3s ease-in-out infinite}
+@keyframes gaugePulse{0%,100%{opacity:1}50%{opacity:0.7}}
+.gauge-center{position:relative;z-index:2;text-align:center}
+.gauge-score{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;color:var(--text-bright);line-height:1}
+.gauge-label-main{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-light);margin-top:4px}
+.gauge-sublabel{font-size:9px;color:rgba(240,237,230,0.5);margin-top:2px;letter-spacing:0.04em}
+.hero-moment-body{padding:28px 32px;display:flex;flex-direction:column;justify-content:center}
+.hero-moment-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.hero-moment-subtitle{font-size:12px;color:var(--text-muted);margin-bottom:18px}
+.hero-moment-status{display:flex;gap:14px;margin-bottom:20px}
+.hms-item{flex:1;padding:14px 16px;border-radius:10px;border:1px solid;transition:transform 0.2s ease}
+.hms-item:hover{transform:translateY(-1px)}
+.hms-green{background:var(--green-bg);border-color:var(--green-border)}
+.hms-yellow{background:var(--yellow-bg);border-color:var(--yellow-border)}
+.hms-red{background:var(--red-bg);border-color:var(--red-border)}
+.hms-count{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;line-height:1}
+.hms-green .hms-count{color:var(--green)}.hms-yellow .hms-count{color:var(--accent)}.hms-red .hms-count{color:var(--red)}
+.hms-label{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-top:4px}
+.hms-green .hms-label{color:var(--green)}.hms-yellow .hms-label{color:var(--accent)}.hms-red .hms-label{color:var(--red)}
+.hms-sub{font-size:10px;color:var(--text-muted);margin-top:2px}
+.hero-moment-departures{display:flex;gap:12px}
+.hmd-chip{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-warm);border:1px solid var(--border);border-radius:8px;flex:1}
+.hmd-num{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text-primary)}
+.hmd-text{font-size:10px;color:var(--text-muted);font-weight:500;letter-spacing:0.03em;line-height:1.3}
+.hmd-urgent{background:var(--red-bg);border-color:var(--red-border)}.hmd-urgent .hmd-num{color:var(--red)}
+.hmd-warn{background:var(--yellow-bg);border-color:var(--yellow-border)}.hmd-warn .hmd-num{color:var(--accent)}
+.map-showcase{background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:0;margin-bottom:28px;overflow:hidden;box-shadow:var(--shadow-lg);position:relative}
+.map-header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid var(--border-light)}
+.map-header-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:10px}
+.map-header-title svg{color:var(--accent)}
+.map-header-badge{display:flex;gap:12px;align-items:center}
+.map-legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-muted);font-weight:500}
+.map-legend-dot{width:8px;height:8px;border-radius:50%}
+.map-legend-line{width:16px;height:2px;border-radius:1px}
+.map-body{display:grid;grid-template-columns:1fr 300px;min-height:420px}
+.map-svg-area{position:relative;background:linear-gradient(160deg,#F5F2EC 0%,#EDE9E0 100%);padding:24px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.map-svg-area::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,100 Q50,60 120,80 T300,60' fill='none' stroke='%230F4C5C' stroke-width='0.5'/%3E%3Cpath d='M0,160 Q80,120 180,140 T360,120' fill='none' stroke='%230F4C5C' stroke-width='0.4'/%3E%3Cpath d='M0,220 Q110,185 240,200 T400,185' fill='none' stroke='%230F4C5C' stroke-width='0.3'/%3E%3Cpath d='M0,280 Q140,250 300,260 T400,245' fill='none' stroke='%230F4C5C' stroke-width='0.25'/%3E%3C/svg%3E");background-size:400px 400px;opacity:0.06;pointer-events:none}
+.map-sidebar{background:var(--bg-warm);border-left:1px solid var(--border-light);padding:20px;overflow-y:auto}
+.map-sidebar-title{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px}
+.map-dest-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:6px;transition:all 0.2s ease;cursor:default}
+.map-dest-card:hover{background:var(--bg-card);box-shadow:var(--shadow-sm)}
+.map-dest-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.map-dest-icon.peru{background:rgba(217,119,6,0.1);color:var(--accent)}
+.map-dest-icon.chile{background:rgba(15,76,92,0.1);color:var(--primary)}
+.map-dest-icon.argentina{background:rgba(217,119,6,0.1);color:var(--accent)}
+.map-dest-icon.ecuador{background:rgba(15,76,92,0.1);color:var(--primary)}
+.map-dest-icon.colombia{background:rgba(217,119,6,0.1);color:var(--accent)}
+.map-dest-icon.bolivia{background:rgba(15,76,92,0.1);color:var(--primary)}
+.map-dest-info{flex:1;min-width:0}
+.map-dest-name{font-size:12px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-dest-detail{font-size:10px;color:var(--text-muted);margin-top:1px}
+.map-dest-metrics{text-align:right;flex-shrink:0}
+.map-dest-rev{font-size:12px;font-weight:700;color:var(--primary)}
+.map-dest-trips{font-size:10px;color:var(--text-muted)}
+.sa-continent{fill:rgba(15,76,92,0.05);stroke:var(--primary-light);stroke-width:1.2;stroke-linejoin:round;filter:drop-shadow(0 1px 3px rgba(15,76,92,0.1))}
+.map-route{fill:none;stroke-width:1.5;stroke-linecap:round;opacity:0.5}
+.map-route.active{opacity:0.7;stroke-dasharray:6,4;animation:routeFlow 2s linear infinite}
+@keyframes routeFlow{from{stroke-dashoffset:0}to{stroke-dashoffset:-20}}
+.map-city{cursor:pointer}
+.map-city-dot{transition:all 0.3s ease}
+.map-city:hover .map-city-dot{filter:drop-shadow(0 0 10px rgba(217,119,6,0.6))!important}
+.map-city-label{font-family:'DM Sans',sans-serif;font-weight:600;pointer-events:none}
+.map-city-count{font-family:'DM Mono',monospace;font-weight:500;pointer-events:none}
+.map-city-pulse{animation:cityPulse 3s ease-in-out infinite;transform-origin:center}
+@keyframes cityPulse{0%,100%{opacity:0.3}50%{opacity:0}}
+.net-route{fill:none;stroke-linecap:round}
+.net-route.primary{stroke-width:2.5;stroke-dasharray:8,5;animation:routeFlow 2.5s linear infinite}
+.net-route.secondary{stroke-width:1.5;stroke-dasharray:6,4;animation:routeFlow 3s linear infinite}
+.net-route.tertiary{stroke-width:1}
+.net-dot{opacity:0.9}
+.net-ring{fill:none;stroke-width:0.8}
+.net-grid-dot{fill:rgba(15,76,92,0.1)}
+.progress-bar{width:100%;height:6px;background:var(--bg-surface);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.8s ease}
+.progress-fill.green{background:linear-gradient(90deg,#059669,#34D399)}
+.progress-fill.yellow{background:linear-gradient(90deg,#D97706,#FBBF24)}
+.progress-fill.red{background:linear-gradient(90deg,#DC2626,#F87171)}
+.progress-fill.primary{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.progress-fill.accent{background:linear-gradient(90deg,var(--accent-dark),var(--accent-light))}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px}
+.progress-label span:first-child{color:var(--text-secondary);font-weight:500}
+.progress-label span:last-child{color:var(--text-muted)}
+.data-table-wrapper{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow-x:auto;overflow-y:visible;margin-bottom:24px;box-shadow:var(--shadow-sm);-webkit-overflow-scrolling:touch}
+.data-table-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;left:0;z-index:2;background:var(--bg-card);min-width:fit-content}
+.data-table-title{font-size:13px;font-weight:600;color:var(--text-primary)}
+.data-table-count{font-size:11px;font-weight:500;color:var(--text-muted);background:var(--bg-surface);padding:4px 12px;border-radius:20px}
+.data-table{width:100%;min-width:900px;border-collapse:collapse}
+.data-table thead th{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);text-align:left;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--bg-warm);white-space:nowrap}
+.data-table thead th:first-child{position:sticky;left:0;z-index:3;background:var(--bg-warm);box-shadow:2px 0 4px -2px rgba(0,0,0,0.08)}
+.data-table tbody tr{transition:background 0.15s ease}
+.data-table tbody tr:hover{background:var(--bg-warm)}
+.data-table tbody td{font-size:12px;padding:12px 18px;border-bottom:1px solid var(--border-light);color:var(--text-primary);white-space:nowrap}
+.data-table tbody tr:last-child td{border-bottom:none}
+.data-table tbody td:first-child{position:sticky;left:0;z-index:1;background:var(--bg-card);box-shadow:2px 0 4px -2px rgba(0,0,0,0.06)}
+.data-table tbody tr:hover td:first-child{background:var(--bg-warm)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:0.03em;padding:4px 10px;border-radius:6px}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
+.badge-yellow{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
+.badge-blue{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.badge-neutral{background:var(--bg-surface);color:var(--text-secondary);border:1px solid var(--border)}
+.badge-dot{width:6px;height:6px;border-radius:50%}
+.badge-green .badge-dot{background:var(--green)}.badge-yellow .badge-dot{background:var(--yellow)}.badge-red .badge-dot{background:var(--red)}.badge-blue .badge-dot{background:var(--blue)}
+.dual-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:140px;padding:18px 0}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:height 0.8s ease;min-width:24px}
+.bar.primary{background:linear-gradient(180deg,var(--primary-light),var(--primary))}
+.bar.accent{background:linear-gradient(180deg,var(--accent-light),var(--accent))}
+.bar.teal-light{background:linear-gradient(180deg,var(--primary-lighter),var(--primary-light))}
+.bar-label{font-size:9px;color:var(--text-muted);letter-spacing:0.04em;text-align:center;font-weight:500}
+.bar-value{font-size:10px;color:var(--text-secondary);font-weight:600}
+.donut-wrapper{display:flex;align-items:center;gap:28px;padding:14px 0}
+.donut-chart{width:110px;height:110px;border-radius:50%;position:relative;flex-shrink:0}
+.donut-center{position:absolute;inset:18px;background:var(--bg-card);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px var(--border-light)}
+.donut-center-value{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text-primary);line-height:1}
+.donut-center-label{font-size:9px;font-weight:500;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-top:2px}
+.donut-legend{display:flex;flex-direction:column;gap:10px}
+.legend-item{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-secondary)}
+.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.funnel{display:flex;flex-direction:column;gap:5px;padding:14px 0}
+.funnel-stage{display:flex;align-items:center;gap:14px;padding:9px 0}
+.funnel-bar-container{flex:1;height:32px;position:relative}
+.funnel-bar{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 14px;transition:width 1s ease}
+.funnel-bar-value{font-size:12px;font-weight:600;color:var(--text-bright);white-space:nowrap}
+.funnel-label{width:150px;font-size:11px;color:var(--text-secondary);text-align:right;flex-shrink:0;font-weight:500}
+.funnel-pct{width:45px;font-size:11px;color:var(--text-muted);text-align:right;flex-shrink:0;font-weight:500}
+.heatmap-grid{display:grid;grid-template-columns:90px repeat(7,1fr);gap:4px;font-size:10px}
+.heatmap-header{color:var(--text-muted);text-align:center;padding:6px;letter-spacing:0.06em;font-weight:600}
+.heatmap-row-label{color:var(--text-secondary);padding:6px 8px 6px 0;display:flex;align-items:center;font-size:10px;font-weight:500}
+.heatmap-cell{border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;transition:transform 0.2s ease;cursor:default;min-height:32px}
+.heatmap-cell:hover{transform:scale(1.08);z-index:2}
+.heat-0{background:var(--bg-surface);color:var(--text-muted)}
+.heat-1{background:rgba(44,122,123,0.08);color:var(--primary-light)}
+.heat-2{background:rgba(44,122,123,0.16);color:var(--primary-light)}
+.heat-3{background:rgba(217,119,6,0.12);color:var(--accent-dark)}
+.heat-4{background:rgba(217,119,6,0.22);color:var(--accent-dark)}
+.heat-5{background:rgba(220,38,38,0.15);color:var(--red)}
+.risk-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.risk-panel-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.risk-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border-light)}
+.risk-item:last-child{border-bottom:none}
+.risk-indicator{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.risk-indicator.red{background:var(--red);box-shadow:0 0 8px rgba(220,38,38,0.3)}
+.risk-indicator.yellow{background:var(--accent);box-shadow:0 0 8px rgba(217,119,6,0.2)}
+.risk-content{flex:1}
+.risk-text{font-size:12px;font-weight:500;color:var(--text-primary)}
+.risk-detail{font-size:11px;color:var(--text-muted);margin-top:3px}
+.risk-action{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border:1px solid rgba(217,119,6,0.2);padding:6px 14px;border-radius:8px;cursor:pointer;transition:all 0.2s ease;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.risk-action:hover{background:rgba(217,119,6,0.15);border-color:rgba(217,119,6,0.35);transform:translateY(-1px)}
+.trip-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;margin-bottom:24px}
+.trip-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;transition:all 0.25s ease;overflow:hidden;box-shadow:var(--shadow-sm)}
+.trip-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:14px 0 0 14px}
+.trip-card.ready::before{background:var(--green)}.trip-card.at-risk::before{background:var(--accent)}.trip-card.critical::before{background:var(--red)}
+.trip-card:hover{box-shadow:var(--shadow-xl);transform:translateY(-2px)}
+.trip-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.trip-id{font-size:10px;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;font-weight:600}
+.trip-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--text-primary);margin-top:4px}
+.trip-dates{font-size:11px;color:var(--accent);margin-top:4px;font-weight:500}
+.trip-travelers{font-size:11px;color:var(--text-muted);margin-top:2px}
+.trip-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border-light)}
+.trip-metric-label{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);font-weight:600;margin-bottom:3px}
+.trip-metric-value{font-size:14px;font-weight:600;color:var(--text-primary)}
+.timeline{position:relative;padding-left:26px}
+.timeline::before{content:'';position:absolute;left:5px;top:0;bottom:0;width:1.5px;background:var(--border)}
+.timeline-item{position:relative;padding-bottom:22px}
+.timeline-item:last-child{padding-bottom:0}
+.timeline-dot{position:absolute;left:-23px;top:5px;width:11px;height:11px;border-radius:50%;border:2.5px solid;background:var(--bg-card)}
+.timeline-dot.green{border-color:var(--green)}.timeline-dot.yellow{border-color:var(--accent)}.timeline-dot.red{border-color:var(--red)}.timeline-dot.blue{border-color:var(--blue)}
+.timeline-time{font-size:10px;color:var(--text-muted);letter-spacing:0.04em;font-weight:500}
+.timeline-content{font-size:12px;font-weight:500;color:var(--text-primary);margin-top:3px}
+.timeline-detail{font-size:11px;color:var(--text-muted);margin-top:2px}
+.model-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.model-table{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.model-table-header{padding:14px 18px;background:var(--bg-warm);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.model-table-name{font-size:12px;font-weight:700;color:var(--primary)}
+.model-table-type{font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);background:var(--bg-surface);padding:3px 10px;border-radius:20px}
+.model-field{padding:9px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border-light);font-size:11px}
+.model-field:last-child{border-bottom:none}
+.field-name{color:var(--text-primary)}.field-type{color:var(--text-muted);font-size:10px;font-family:'DM Mono',monospace}
+.field-key{font-size:8px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:2px 6px;border-radius:4px;letter-spacing:0.06em}
+.field-fk{font-size:8px;font-weight:700;color:var(--primary-light);background:rgba(44,122,123,0.08);padding:2px 6px;border-radius:4px;letter-spacing:0.06em}
+.field-left{display:flex;align-items:center;gap:8px}
+.relationships-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:24px;box-shadow:var(--shadow-sm)}
+.rel-item{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:11px;border-bottom:1px solid var(--border-light)}
+.rel-item:last-child{border-bottom:none}
+.rel-from,.rel-to{color:var(--primary);font-weight:600;background:rgba(15,76,92,0.06);padding:3px 10px;border-radius:6px}
+.rel-arrow{color:var(--text-muted);font-size:12px;font-weight:500}
+.rel-type{color:var(--text-muted);font-size:10px;margin-left:auto;font-family:'DM Mono',monospace}
+.dax-block{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.dax-header{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;background:var(--bg-warm);border-bottom:1px solid var(--border)}
+.dax-name{font-size:12px;font-weight:600;color:var(--text-primary)}
+.dax-type{font-size:9px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--primary-light);background:rgba(44,122,123,0.08);padding:3px 10px;border-radius:20px}
+.dax-code{padding:18px;font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.75;color:var(--text-secondary);overflow-x:auto;white-space:pre;background:var(--bg-warm)}
+.dax-keyword{color:var(--primary);font-weight:500}.dax-function{color:var(--primary-light)}
+.dax-string{color:var(--green)}.dax-comment{color:var(--text-muted);font-style:italic}.dax-number{color:var(--accent)}
+.visual-rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px}
+.visual-rec-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:22px;transition:all 0.2s ease;box-shadow:var(--shadow-sm)}
+.visual-rec-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.visual-rec-type{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.visual-rec-kpi{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--text-primary);margin-bottom:10px}
+.visual-rec-rationale{font-size:12px;color:var(--text-muted);line-height:1.65}
+.visual-rec-config{margin-top:14px;padding-top:14px;border-top:1px solid var(--border-light);display:flex;flex-wrap:wrap;gap:6px}
+.config-tag{font-size:10px;font-weight:500;color:var(--text-secondary);background:var(--bg-surface);border:1px solid var(--border);padding:4px 10px;border-radius:6px}
+.rationale-block{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
+.rationale-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--text-primary);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.rationale-title::before{content:'';width:20px;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-light));border-radius:2px}
+.rationale-text{font-size:12.5px;color:var(--text-secondary);line-height:1.75;margin-bottom:12px}
+.rationale-text:last-child{margin-bottom:0}
+.rationale-list{list-style:none;padding:0}
+.rationale-list li{font-size:12.5px;color:var(--text-secondary);line-height:1.7;padding:5px 0;padding-left:20px;position:relative}
+.rationale-list li::before{content:'';position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:2px;background:var(--accent);opacity:0.5}
+.weight-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-align:center;padding:18px 14px;box-shadow:var(--shadow-xs);transition:all 0.2s ease}
+.weight-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.weight-pct{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--accent);line-height:1}
+.weight-label{font-size:10px;font-weight:600;letter-spacing:0.04em;color:var(--text-primary);margin-top:4px}
+.weight-desc{font-size:10px;color:var(--text-muted);margin-top:6px;line-height:1.4}
+.threshold-card{flex:1;text-align:center;padding:18px;border-radius:12px;border:1px solid;transition:transform 0.2s ease}
+.threshold-card:hover{transform:translateY(-1px)}
+.threshold-green{background:var(--green-bg);border-color:var(--green-border)}
+.threshold-yellow{background:var(--yellow-bg);border-color:var(--yellow-border)}
+.threshold-red{background:var(--red-bg);border-color:var(--red-border)}
+.threshold-value{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;line-height:1}
+.threshold-green .threshold-value{color:var(--green)}.threshold-yellow .threshold-value{color:var(--accent)}.threshold-red .threshold-value{color:var(--red)}
+.threshold-status{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-top:5px}
+.threshold-green .threshold-status{color:var(--green)}.threshold-yellow .threshold-status{color:var(--accent)}.threshold-red .threshold-status{color:var(--red)}
+.threshold-desc{font-size:10px;color:var(--text-muted);margin-top:8px;line-height:1.4}
+@media(max-width:1200px){.kpi-grid-4{grid-template-columns:repeat(2,1fr)}.dual-col{grid-template-columns:1fr}.model-grid{grid-template-columns:1fr 1fr}.hero-inner{flex-direction:column;align-items:flex-start;gap:20px}.hero-right{align-items:flex-start}.hero-moment{grid-template-columns:1fr}.map-body{grid-template-columns:1fr}.map-sidebar{border-left:none;border-top:1px solid var(--border-light)}}
+@media(max-width:768px){.dashboard-wrapper{padding:0 16px 40px}.hero{margin:0 -16px}.hero-inner{padding:24px 16px 70px}.dash-nav{margin:0 -16px;padding:0 16px}.kpi-grid-4{grid-template-columns:1fr}.model-grid{grid-template-columns:1fr}.trip-cards{grid-template-columns:1fr}.visual-rec-grid{grid-template-columns:1fr}.hero-title{font-size:32px}.hero-moment-status{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div class="dashboard-wrapper">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-stars"><span style="left:8%;top:15%"></span><span style="left:22%;top:8%"></span><span style="left:35%;top:22%"></span><span style="left:48%;top:5%"></span><span style="left:62%;top:18%"></span><span style="left:75%;top:10%"></span><span style="left:88%;top:20%"></span><span style="left:15%;top:32%"></span><span style="left:55%;top:28%"></span><span style="left:92%;top:35%"></span><span style="left:5%;top:40%"></span><span style="left:42%;top:12%"></span></div>
+    <div class="hero-topo"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-brand"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12,2 L14,10 L12,7 L10,10 Z"/><path d="M12,22 L14,14 L12,17 L10,14 Z"/><path d="M2,12 L10,14 L7,12 L10,10 Z"/><path d="M22,12 L14,10 L17,12 L14,14 Z"/></svg>Operations Intelligence Platform</div>
+        <h1 class="hero-title">NOMAD<span class="brand-dot"></span><span class="brand-360">360</span></h1>
+        <p class="hero-subtitle">Travel Operations Intelligence Platform &middot; South America Division</p>
+        <p class="hero-tagline">Operational visibility for extraordinary journeys</p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-meta"><strong>Report Date:</strong> June 20, 2026 &nbsp;&middot;&nbsp; <strong>Period:</strong> Rolling 90 Days &nbsp;&middot;&nbsp; <strong>Refresh:</strong> Live</div>
+        <div class="designer-plaque"><div class="plaque-avatar">JA</div><div class="plaque-info"><span class="plaque-name">Jos&eacute; Antonio Escobar</span><span class="plaque-role">Operations &amp; Continuous Improvement</span></div></div>
+      </div>
+    </div>
+    <div class="hero-mountains"><svg viewBox="0 0 1440 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,90 L0,60 Q40,30 80,48 Q120,18 180,40 Q230,8 300,32 Q370,12 440,35 Q500,4 580,28 Q650,15 720,38 Q790,8 860,30 Q930,14 1000,35 Q1060,6 1140,28 Q1210,16 1280,34 Q1350,10 1440,42 L1440,90 Z" fill="rgba(10,58,71,0.5)"/><path d="M0,90 L0,68 Q60,45 140,58 Q240,32 340,52 Q440,28 540,48 Q640,35 740,52 Q840,30 940,48 Q1040,38 1140,52 Q1240,42 1340,55 Q1400,48 1440,58 L1440,90 Z" fill="rgba(15,76,92,0.35)"/><path d="M0,90 L0,76 Q80,58 180,68 Q300,50 420,65 Q540,52 660,66 Q780,55 900,68 Q1020,58 1140,68 Q1260,62 1380,72 L1440,90 Z" fill="rgba(15,76,92,0.2)"/><path d="M0,90 L0,82 Q100,70 240,78 Q400,66 540,76 Q680,68 820,78 Q960,72 1100,80 Q1240,74 1440,82 L1440,90 Z" fill="var(--bg-page)"/></svg></div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="dash-nav">
+    <button class="nav-tab active" onclick="showSection('executive',this)">Command Center</button>
+    <button class="nav-tab" onclick="showSection('travelers',this)">Traveler Management</button>
+    <button class="nav-tab" onclick="showSection('suppliers',this)">Partner Network</button>
+    <button class="nav-tab" onclick="showSection('financial',this)">Trip Financial Health</button>
+    <button class="nav-tab" onclick="showSection('cx',this)">Traveler Experience</button>
+    <button class="nav-tab" onclick="showSection('readiness',this)">Expedition Readiness</button>
+    <button class="nav-tab" onclick="showSection('risk',this)">Risk Intelligence</button>
+    <button class="nav-tab" onclick="showSection('datamodel',this)">Data Model &amp; DAX</button>
+    <button class="nav-tab" onclick="showSection('kpis',this)">KPI Catalog</button>
+    <button class="nav-tab" onclick="showSection('visuals',this)">Visual Blueprint</button>
+  </nav>
+
+  <!-- ============================================================ -->
+  <!--  1. JOURNEY COMMAND CENTER                                    -->
+  <!-- ============================================================ -->
+  <div id="executive" class="section active">
+
+    <div class="hero-moment">
+      <div class="hero-gauge-area">
+        <div class="gauge-ring"><svg viewBox="0 0 140 140"><circle class="gauge-track" cx="70" cy="70" r="60"/><circle class="gauge-fill pulse" cx="70" cy="70" r="60"/></svg><div class="gauge-center"><div class="gauge-score">78%</div><div class="gauge-label-main">Readiness</div><div class="gauge-sublabel">47 active expeditions</div></div></div>
+      </div>
+      <div class="hero-moment-body">
+        <div class="hero-moment-title">Expedition Readiness Score</div>
+        <div class="hero-moment-subtitle">Weighted composite: Services (30%) &middot; Flights (20%) &middot; Payments (20%) &middot; Registration (15%) &middot; Documents (15%)</div>
+        <div class="hero-moment-status">
+          <div class="hms-item hms-green"><div class="hms-count">28</div><div class="hms-label">Ready</div><div class="hms-sub">59.6% of expeditions</div></div>
+          <div class="hms-item hms-yellow"><div class="hms-count">13</div><div class="hms-label">At Risk</div><div class="hms-sub">Actionable gaps identified</div></div>
+          <div class="hms-item hms-red"><div class="hms-count">6</div><div class="hms-label">Critical</div><div class="hms-sub">Immediate escalation needed</div></div>
+        </div>
+        <div class="hero-moment-departures">
+          <div class="hmd-chip hmd-urgent"><div class="hmd-num">6</div><div class="hmd-text">Departures<br>&le; 7 days</div></div>
+          <div class="hmd-chip hmd-warn"><div class="hmd-num">11</div><div class="hmd-text">Departures<br>&le; 14 days</div></div>
+          <div class="hmd-chip"><div class="hmd-num">19</div><div class="hmd-text">Departures<br>&le; 30 days</div></div>
+          <div class="hmd-chip"><div class="hmd-num">47</div><div class="hmd-text">Total<br>Active</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!--  NETWORK DIAGRAM — REPLACES MAP              -->
+    <!-- ============================================ -->
+    <div class="map-showcase">
+      <div class="map-header">
+        <div class="map-header-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2,12h20"/><path d="M12,2a15.3,15.3,0,0,1,4,10,15.3,15.3,0,0,1-4,10,15.3,15.3,0,0,1-4-10A15.3,15.3,0,0,1,12,2z"/></svg>South America &mdash; Active Expedition Network</div>
+        <div class="map-header-badge">
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--accent)"></div> Major Hub</div>
+          <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--primary-light)"></div> Destination</div>
+          <div class="map-legend-item"><div class="map-legend-line" style="background:var(--accent);opacity:0.5"></div> Active Route</div>
+        </div>
+      </div>
+      <div class="map-body">
+        <div class="map-svg-area">
+          <svg viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:580px;height:auto">
+            <defs>
+              <pattern id="net-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+                <circle cx="14" cy="14" r="0.6" class="net-grid-dot"/>
+              </pattern>
+              <filter id="glow-sm" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              <filter id="glow-lg" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+
+            <!-- Dot grid background -->
+            <rect width="600" height="460" fill="url(#net-grid)"/>
+
+            <!-- Structural guide lines -->
+            <line x1="0" y1="153" x2="600" y2="153" stroke="rgba(15,76,92,0.035)" stroke-width="0.5" stroke-dasharray="2,7"/>
+            <line x1="0" y1="306" x2="600" y2="306" stroke="rgba(15,76,92,0.035)" stroke-width="0.5" stroke-dasharray="2,7"/>
+            <line x1="200" y1="0" x2="200" y2="460" stroke="rgba(15,76,92,0.035)" stroke-width="0.5" stroke-dasharray="2,7"/>
+            <line x1="400" y1="0" x2="400" y2="460" stroke="rgba(15,76,92,0.035)" stroke-width="0.5" stroke-dasharray="2,7"/>
+
+            <!-- Range rings around Lima hub -->
+            <circle cx="210" cy="200" r="60" class="net-ring" stroke="rgba(217,119,6,0.07)"/>
+            <circle cx="210" cy="200" r="110" class="net-ring" stroke="rgba(217,119,6,0.05)" stroke-width="0.6"/>
+            <circle cx="210" cy="200" r="170" class="net-ring" stroke="rgba(217,119,6,0.035)" stroke-width="0.4"/>
+            <circle cx="210" cy="200" r="240" class="net-ring" stroke="rgba(217,119,6,0.02)" stroke-width="0.3"/>
+
+            <!-- Region labels (very faint) -->
+            <text x="395" y="40" font-family="DM Mono" font-size="7" fill="rgba(15,76,92,0.08)" letter-spacing="0.15em">NORTHERN ANDES</text>
+            <text x="100" y="160" font-family="DM Mono" font-size="7" fill="rgba(15,76,92,0.08)" letter-spacing="0.15em">CENTRAL ANDES</text>
+            <text x="370" y="240" font-family="DM Mono" font-size="7" fill="rgba(15,76,92,0.08)" letter-spacing="0.15em">ALTIPLANO</text>
+            <text x="40" y="375" font-family="DM Mono" font-size="7" fill="rgba(15,76,92,0.08)" letter-spacing="0.15em">SOUTHERN CONE</text>
+
+            <!-- ===== ROUTE CONNECTIONS ===== -->
+
+            <!-- Bogota -> Lima -->
+            <path d="M465,55 Q365,105 210,200" class="net-route secondary" stroke="rgba(217,119,6,0.35)"/>
+            <!-- Quito -> Lima -->
+            <path d="M80,105 Q125,148 210,200" class="net-route secondary" stroke="rgba(44,122,123,0.35)"/>
+            <!-- Lima -> Cusco (PRIMARY) -->
+            <path d="M210,200 Q275,208 350,225" class="net-route primary" stroke="rgba(217,119,6,0.5)"/>
+            <!-- Cusco -> Uyuni -->
+            <path d="M350,225 Q400,248 460,280" class="net-route secondary" stroke="rgba(44,122,123,0.28)"/>
+            <!-- Lima -> Atacama -->
+            <path d="M210,200 Q135,248 90,300" class="net-route secondary" stroke="rgba(44,122,123,0.28)"/>
+            <!-- Atacama -> Santiago -->
+            <path d="M90,300 Q135,330 210,365" class="net-route secondary" stroke="rgba(217,119,6,0.35)"/>
+            <!-- Santiago -> Buenos Aires (PRIMARY) -->
+            <path d="M210,365 Q328,345 450,350" class="net-route primary" stroke="rgba(217,119,6,0.5)"/>
+            <!-- Santiago -> Patagonia -->
+            <path d="M210,365 Q252,390 320,415" class="net-route secondary" stroke="rgba(44,122,123,0.28)"/>
+            <!-- Buenos Aires -> Patagonia -->
+            <path d="M450,350 Q395,385 320,415" class="net-route tertiary" stroke="rgba(217,119,6,0.18)" stroke-dasharray="4,4"/>
+
+            <!-- ===== ANIMATED TRAVEL DOTS ===== -->
+            <circle r="3" fill="var(--accent)" class="net-dot"><animateMotion path="M465,55 Q365,105 210,200" dur="4s" repeatCount="indefinite"/></circle>
+            <circle r="2.5" fill="var(--primary-light)" class="net-dot"><animateMotion path="M80,105 Q125,148 210,200" dur="3s" repeatCount="indefinite"/></circle>
+            <circle r="3.5" fill="var(--accent)" class="net-dot"><animateMotion path="M210,200 Q275,208 350,225" dur="2.5s" repeatCount="indefinite"/></circle>
+            <circle r="2" fill="var(--primary-light)" class="net-dot" opacity="0.7"><animateMotion path="M350,225 Q400,248 460,280" dur="3s" repeatCount="indefinite"/></circle>
+            <circle r="2" fill="var(--primary-light)" class="net-dot" opacity="0.7"><animateMotion path="M210,200 Q135,248 90,300" dur="3.5s" repeatCount="indefinite"/></circle>
+            <circle r="2.5" fill="var(--accent)" class="net-dot"><animateMotion path="M90,300 Q135,330 210,365" dur="2.5s" repeatCount="indefinite"/></circle>
+            <circle r="3.5" fill="var(--accent)" class="net-dot"><animateMotion path="M210,365 Q328,345 450,350" dur="4s" repeatCount="indefinite"/></circle>
+            <circle r="2" fill="var(--primary-light)" class="net-dot" opacity="0.7"><animateMotion path="M210,365 Q252,390 320,415" dur="2.5s" repeatCount="indefinite"/></circle>
+
+            <!-- ===== CITY NODES ===== -->
+
+            <!-- Lima — PRIMARY HUB (16 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="210" cy="200" r="26" fill="rgba(217,119,6,0.1)"/>
+              <circle class="map-city-dot" cx="210" cy="200" r="14" fill="var(--accent)" stroke="#fff" stroke-width="2.5" filter="url(#glow-lg)"/>
+              <circle cx="210" cy="200" r="4.5" fill="#fff" opacity="0.55"/>
+              <text x="210" y="168" text-anchor="middle" class="map-city-label" font-size="13" fill="var(--text-primary)">LIMA</text>
+              <text x="210" y="230" text-anchor="middle" class="map-city-count" font-size="9" fill="var(--text-muted)">16 trips &middot; $1.02M</text>
+            </g>
+
+            <!-- Cusco (12 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="350" cy="225" r="20" fill="rgba(217,119,6,0.08)"/>
+              <circle class="map-city-dot" cx="350" cy="225" r="11" fill="var(--accent)" stroke="#fff" stroke-width="2" filter="url(#glow-sm)"/>
+              <circle cx="350" cy="225" r="3" fill="#fff" opacity="0.5"/>
+              <text x="378" y="218" class="map-city-label" font-size="10" fill="var(--text-secondary)">Cusco</text>
+              <text x="378" y="232" class="map-city-count" font-size="8" fill="var(--text-muted)">12 trips</text>
+            </g>
+
+            <!-- Santiago (8 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="210" cy="365" r="18" fill="rgba(217,119,6,0.08)"/>
+              <circle class="map-city-dot" cx="210" cy="365" r="9" fill="var(--accent)" stroke="#fff" stroke-width="2" filter="url(#glow-sm)"/>
+              <circle cx="210" cy="365" r="2.5" fill="#fff" opacity="0.5"/>
+              <text x="210" y="348" text-anchor="middle" class="map-city-label" font-size="10" fill="var(--text-secondary)">Santiago</text>
+              <text x="210" y="390" text-anchor="middle" class="map-city-count" font-size="8" fill="var(--text-muted)">8 trips &middot; $684K</text>
+            </g>
+
+            <!-- Quito (4 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="80" cy="105" r="14" fill="rgba(44,122,123,0.08)"/>
+              <circle class="map-city-dot" cx="80" cy="105" r="6.5" fill="var(--primary-light)" stroke="#fff" stroke-width="1.5" filter="url(#glow-sm)"/>
+              <circle cx="80" cy="105" r="2" fill="#fff" opacity="0.4"/>
+              <text x="80" y="86" text-anchor="middle" class="map-city-label" font-size="9" fill="var(--text-secondary)">Quito</text>
+              <text x="80" y="124" text-anchor="middle" class="map-city-count" font-size="7" fill="var(--text-muted)">4 trips</text>
+            </g>
+
+            <!-- Bogota (3 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="465" cy="55" r="12" fill="rgba(217,119,6,0.06)"/>
+              <circle class="map-city-dot" cx="465" cy="55" r="5.5" fill="var(--accent)" stroke="#fff" stroke-width="1.5" filter="url(#glow-sm)"/>
+              <text x="465" y="36" text-anchor="middle" class="map-city-label" font-size="9" fill="var(--text-secondary)">Bogot&aacute;</text>
+              <text x="465" y="73" text-anchor="middle" class="map-city-count" font-size="7" fill="var(--text-muted)">3 trips</text>
+            </g>
+
+            <!-- Atacama (5 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="90" cy="300" r="15" fill="rgba(44,122,123,0.08)"/>
+              <circle class="map-city-dot" cx="90" cy="300" r="7" fill="var(--primary-light)" stroke="#fff" stroke-width="1.5" filter="url(#glow-sm)"/>
+              <circle cx="90" cy="300" r="2" fill="#fff" opacity="0.4"/>
+              <text x="90" y="283" text-anchor="middle" class="map-city-label" font-size="9" fill="var(--text-secondary)">Atacama</text>
+              <text x="90" y="320" text-anchor="middle" class="map-city-count" font-size="7" fill="var(--text-muted)">5 trips</text>
+            </g>
+
+            <!-- Buenos Aires (5 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="450" cy="350" r="15" fill="rgba(217,119,6,0.06)"/>
+              <circle class="map-city-dot" cx="450" cy="350" r="7" fill="var(--accent)" stroke="#fff" stroke-width="1.5" filter="url(#glow-sm)"/>
+              <circle cx="450" cy="350" r="2" fill="#fff" opacity="0.4"/>
+              <text x="482" y="345" class="map-city-label" font-size="9" fill="var(--text-secondary)">Buenos Aires</text>
+              <text x="482" y="358" class="map-city-count" font-size="7" fill="var(--text-muted)">5 trips</text>
+            </g>
+
+            <!-- Uyuni (2 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="460" cy="280" r="10" fill="rgba(44,122,123,0.06)"/>
+              <circle class="map-city-dot" cx="460" cy="280" r="4.5" fill="var(--primary-light)" stroke="#fff" stroke-width="1.5" filter="url(#glow-sm)"/>
+              <text x="480" y="276" class="map-city-label" font-size="8" fill="var(--text-secondary)">Uyuni</text>
+              <text x="480" y="288" class="map-city-count" font-size="7" fill="var(--text-muted)">2 trips</text>
+            </g>
+
+            <!-- Patagonia (4 trips) -->
+            <g class="map-city">
+              <circle class="map-city-pulse" cx="320" cy="415" r="14" fill="rgba(44,122,123,0.08)"/>
+              <circle class="map-city-dot" cx="320" cy="415" r="6.5" fill="var(--primary-light)" stroke="#fff" stroke-width="1.5" filter="url(#glow-sm)"/>
+              <circle cx="320" cy="415" r="2" fill="#fff" opacity="0.4"/>
+              <text x="320" y="399" text-anchor="middle" class="map-city-label" font-size="9" fill="var(--text-secondary)">Patagonia</text>
+              <text x="320" y="436" text-anchor="middle" class="map-city-count" font-size="7" fill="var(--text-muted)">4 trips</text>
+            </g>
+
+            <!-- Decorative corner elements -->
+            <text x="18" y="20" font-family="DM Mono" font-size="7" fill="rgba(15,76,92,0.22)" letter-spacing="0.2em" font-weight="500">ROUTE NETWORK</text>
+            <line x1="18" y1="24" x2="118" y2="24" stroke="rgba(15,76,92,0.1)" stroke-width="0.5"/>
+            <text x="582" y="20" text-anchor="end" font-family="DM Mono" font-size="7" fill="rgba(15,76,92,0.22)" letter-spacing="0.1em">9 ROUTES &middot; 47 TRIPS</text>
+            <path d="M8,8 L8,22 M8,8 L22,8" stroke="rgba(15,76,92,0.1)" stroke-width="1" fill="none"/>
+            <path d="M592,8 L592,22 M592,8 L578,8" stroke="rgba(15,76,92,0.1)" stroke-width="1" fill="none"/>
+            <path d="M8,452 L8,438 M8,452 L22,452" stroke="rgba(15,76,92,0.1)" stroke-width="1" fill="none"/>
+            <path d="M592,452 L592,438 M592,452 L578,452" stroke="rgba(15,76,92,0.1)" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+
+        <!-- SIDEBAR — UNCHANGED -->
+        <div class="map-sidebar">
+          <div class="map-sidebar-title">Destination Performance</div>
+          <div class="map-dest-card"><div class="map-dest-icon peru">PE</div><div class="map-dest-info"><div class="map-dest-name">Peru &mdash; Lima, Cusco, Sacred Valley</div><div class="map-dest-detail">16 expeditions &middot; 38 travelers</div></div><div class="map-dest-metrics"><div class="map-dest-rev">$1.02M</div><div class="map-dest-trips">35.9%</div></div></div>
+          <div class="map-dest-card"><div class="map-dest-icon chile">CL</div><div class="map-dest-info"><div class="map-dest-name">Chile &mdash; Santiago, Atacama, Patagonia</div><div class="map-dest-detail">12 expeditions &middot; 28 travelers</div></div><div class="map-dest-metrics"><div class="map-dest-rev">$684K</div><div class="map-dest-trips">24.1%</div></div></div>
+          <div class="map-dest-card"><div class="map-dest-icon argentina">AR</div><div class="map-dest-info"><div class="map-dest-name">Argentina &mdash; Buenos Aires, NW, Patagonia</div><div class="map-dest-detail">8 expeditions &middot; 22 travelers</div></div><div class="map-dest-metrics"><div class="map-dest-rev">$482K</div><div class="map-dest-trips">17.0%</div></div></div>
+          <div class="map-dest-card"><div class="map-dest-icon ecuador">EC</div><div class="map-dest-info"><div class="map-dest-name">Ecuador &mdash; Quito, Gal&aacute;pagos Islands</div><div class="map-dest-detail">6 expeditions &middot; 18 travelers</div></div><div class="map-dest-metrics"><div class="map-dest-rev">$398K</div><div class="map-dest-trips">14.0%</div></div></div>
+          <div class="map-dest-card"><div class="map-dest-icon colombia">CO</div><div class="map-dest-info"><div class="map-dest-name">Colombia &mdash; Bogot&aacute;, Cartagena, Coffee Belt</div><div class="map-dest-detail">3 expeditions &middot; 6 travelers</div></div><div class="map-dest-metrics"><div class="map-dest-rev">$168K</div><div class="map-dest-trips">5.9%</div></div></div>
+          <div class="map-dest-card"><div class="map-dest-icon bolivia">BO</div><div class="map-dest-info"><div class="map-dest-name">Bolivia &mdash; La Paz, Uyuni, Sucre</div><div class="map-dest-detail">2 expeditions &middot; 4 travelers</div></div><div class="map-dest-metrics"><div class="map-dest-rev">$86K</div><div class="map-dest-trips">3.0%</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi-card"><div class="kpi-label">Active Expeditions</div><div class="kpi-value accent">47</div><div class="kpi-change up">&#9650; 12% vs. prior quarter</div><div class="kpi-context">Across Peru, Chile, Argentina, Colombia, Ecuador, Bolivia</div></div>
+      <div class="kpi-card"><div class="kpi-label">Travelers in Pipeline</div><div class="kpi-value">138</div><div class="kpi-change up">&#9650; 8 new this week</div><div class="kpi-context">92 adults &middot; 31 children &middot; 15 solo travelers</div></div>
+      <div class="kpi-card"><div class="kpi-label">Revenue Pipeline</div><div class="kpi-value accent">$2.84M</div><div class="kpi-change up">&#9650; 15% YoY growth</div><div class="kpi-context">$1.92M collected &middot; $920K outstanding</div></div>
+      <div class="kpi-card"><div class="kpi-label">Outstanding Balance</div><div class="kpi-value primary">$920K</div><div class="kpi-change neutral">32 expeditions with balance</div><div class="kpi-context"><div class="progress-bar" style="margin-top:6px"><div class="progress-fill accent" style="width:67.6%"></div></div></div></div>
+    </div>
+    <div class="dual-col">
+      <div class="kpi-card"><div class="kpi-label">Departure Volume &mdash; Next 90 Days</div><div class="bar-chart"><div class="bar-col"><div class="bar-value">6</div><div class="bar accent" style="height:30%"></div><div class="bar-label">7d</div></div><div class="bar-col"><div class="bar-value">5</div><div class="bar accent" style="height:25%"></div><div class="bar-label">8&ndash;14d</div></div><div class="bar-col"><div class="bar-value">8</div><div class="bar accent" style="height:40%"></div><div class="bar-label">15&ndash;30d</div></div><div class="bar-col"><div class="bar-value">10</div><div class="bar primary" style="height:50%"></div><div class="bar-label">31&ndash;45d</div></div><div class="bar-col"><div class="bar-value">7</div><div class="bar primary" style="height:35%"></div><div class="bar-label">46&ndash;60d</div></div><div class="bar-col"><div class="bar-value">6</div><div class="bar teal-light" style="height:30%"></div><div class="bar-label">61&ndash;90d</div></div><div class="bar-col"><div class="bar-value">5</div><div class="bar teal-light" style="height:25%"></div><div class="bar-label">90d+</div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Collection Status</div><div style="display:flex;flex-direction:column;gap:14px;margin-top:14px"><div><div class="progress-label"><span>Deposits Collected</span><span>$847,200 / $892,000</span></div><div class="progress-bar"><div class="progress-fill green" style="width:95%"></div></div></div><div><div class="progress-label"><span>Final Payments Due (30d)</span><span>$412,800 / $640,000</span></div><div class="progress-bar"><div class="progress-fill yellow" style="width:64.5%"></div></div></div><div><div class="progress-label"><span>Overdue Balances</span><span style="color:var(--red);font-weight:600">$67,400 &mdash; 8 trips</span></div><div class="progress-bar"><div class="progress-fill red" style="width:100%"></div></div></div><div><div class="progress-label"><span>Full Collection Rate</span><span>$1.92M / $2.84M</span></div><div class="progress-bar"><div class="progress-fill accent" style="width:67.6%"></div></div></div></div></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  2. TRAVELER MANAGEMENT                                       -->
+  <!-- ============================================================ -->
+  <div id="travelers" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Traveler Management</h2><span class="section-badge">6 countries &middot; 138 travelers</span></div>
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi-card"><div class="kpi-label">Total Travelers</div><div class="kpi-value accent">138</div><div class="kpi-change up">&#9650; 8 new this week</div><div class="kpi-context">92 adults &middot; 31 children &middot; 15 solo</div></div>
+      <div class="kpi-card"><div class="kpi-label">Documents Complete</div><div class="kpi-value">89%</div><div class="kpi-change up">&#9650; from 82% last month</div><div class="kpi-context"><div class="progress-bar" style="margin-top:6px"><div class="progress-fill green" style="width:89%"></div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Flights Confirmed</div><div class="kpi-value primary">74%</div><div class="kpi-change down">&#9660; 26% pending confirmation</div><div class="kpi-context"><div class="progress-bar" style="margin-top:6px"><div class="progress-fill primary" style="width:74%"></div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Medical Forms</div><div class="kpi-value accent">91%</div><div class="kpi-change neutral">12 forms outstanding</div><div class="kpi-context"><div class="progress-bar" style="margin-top:6px"><div class="progress-fill accent" style="width:91%"></div></div></div></div>
+    </div>
+    <div class="data-table-wrapper">
+      <div class="data-table-header"><span class="data-table-title">Traveler Roster &mdash; Active Expeditions</span><span class="data-table-count">138 records</span></div>
+      <table class="data-table">
+        <thead><tr><th>Traveler</th><th>Trip</th><th>Country</th><th>Type</th><th>Documents</th><th>Flights</th><th>Payment</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Mar&iacute;a Gonz&aacute;lez</strong></td><td>CUS-2026-003</td><td>Peru</td><td><span class="badge badge-blue"><span class="badge-dot"></span>Adult</span></td><td><span class="badge badge-green">Complete</span></td><td><span class="badge badge-green">Confirmed</span></td><td><span class="badge badge-green">Paid</span></td><td><span class="badge badge-green"><span class="badge-dot"></span>Ready</span></td></tr>
+          <tr><td><strong>James Wilson</strong></td><td>ATC-2026-007</td><td>Chile</td><td><span class="badge badge-blue"><span class="badge-dot"></span>Adult</span></td><td><span class="badge badge-green">Complete</span></td><td><span class="badge badge-yellow">Pending</span></td><td><span class="badge badge-green">Paid</span></td><td><span class="badge badge-yellow"><span class="badge-dot"></span>At Risk</span></td></tr>
+          <tr><td><strong>Sophie Laurent</strong></td><td>BA-2026-012</td><td>Argentina</td><td><span class="badge badge-blue"><span class="badge-dot"></span>Solo</span></td><td><span class="badge badge-green">Complete</span></td><td><span class="badge badge-green">Confirmed</span></td><td><span class="badge badge-yellow">Partial</span></td><td><span class="badge badge-yellow"><span class="badge-dot"></span>At Risk</span></td></tr>
+          <tr><td><strong>Carlos Mendoza</strong> +2</td><td>LIM-2026-001</td><td>Peru</td><td><span class="badge badge-neutral"><span class="badge-dot"></span>Family</span></td><td><span class="badge badge-yellow">1 pending</span></td><td><span class="badge badge-green">Confirmed</span></td><td><span class="badge badge-green">Paid</span></td><td><span class="badge badge-yellow"><span class="badge-dot"></span>At Risk</span></td></tr>
+          <tr><td><strong>Ana Reyes</strong></td><td>QTO-2026-004</td><td>Ecuador</td><td><span class="badge badge-blue"><span class="badge-dot"></span>Adult</span></td><td><span class="badge badge-green">Complete</span></td><td><span class="badge badge-green">Confirmed</span></td><td><span class="badge badge-green">Paid</span></td><td><span class="badge badge-green"><span class="badge-dot"></span>Ready</span></td></tr>
+          <tr><td><strong>Kenji Tanaka</strong></td><td>BGT-2026-002</td><td>Colombia</td><td><span class="badge badge-blue"><span class="badge-dot"></span>Adult</span></td><td><span class="badge badge-red">Expired</span></td><td><span class="badge badge-yellow">Pending</span></td><td><span class="badge badge-red">Overdue</span></td><td><span class="badge badge-red"><span class="badge-dot"></span>Critical</span></td></tr>
+          <tr><td><strong>Laura Schmidt</strong> +1</td><td>UYN-2026-005</td><td>Bolivia</td><td><span class="badge badge-neutral"><span class="badge-dot"></span>Family</span></td><td><span class="badge badge-green">Complete</span></td><td><span class="badge badge-green">Confirmed</span></td><td><span class="badge badge-yellow">Partial</span></td><td><span class="badge badge-yellow"><span class="badge-dot"></span>At Risk</span></td></tr>
+          <tr><td><strong>Diego Fern&aacute;ndez</strong> +3</td><td>PTG-2026-009</td><td>Argentina</td><td><span class="badge badge-neutral"><span class="badge-dot"></span>Family</span></td><td><span class="badge badge-green">Complete</span></td><td><span class="badge badge-green">Confirmed</span></td><td><span class="badge badge-green">Paid</span></td><td><span class="badge badge-green"><span class="badge-dot"></span>Ready</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="dual-col">
+      <div class="kpi-card"><div class="kpi-label">Traveler Type Distribution</div><div class="donut-wrapper"><div class="donut-chart" style="background:conic-gradient(var(--primary) 0% 67%,var(--accent) 67% 89%,var(--primary-lighter) 89% 100%)"><div class="donut-center"><div class="donut-center-value">138</div><div class="donut-center-label">Travelers</div></div></div><div class="donut-legend"><div class="legend-item"><div class="legend-dot" style="background:var(--primary)"></div> Adults &mdash; 92 (67%)</div><div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Children &mdash; 31 (22%)</div><div class="legend-item"><div class="legend-dot" style="background:var(--primary-lighter)"></div> Solo &mdash; 15 (11%)</div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Documents Pipeline</div><div style="display:flex;flex-direction:column;gap:14px;margin-top:14px"><div><div class="progress-label"><span>Passports Verified</span><span>128 / 138 (93%)</span></div><div class="progress-bar"><div class="progress-fill green" style="width:93%"></div></div></div><div><div class="progress-label"><span>Visas Obtained</span><span>114 / 138 (83%)</span></div><div class="progress-bar"><div class="progress-fill primary" style="width:83%"></div></div></div><div><div class="progress-label"><span>Medical Forms</span><span>126 / 138 (91%)</span></div><div class="progress-bar"><div class="progress-fill accent" style="width:91%"></div></div></div><div><div class="progress-label"><span>Insurance Confirmed</span><span>120 / 138 (87%)</span></div><div class="progress-bar"><div class="progress-fill yellow" style="width:87%"></div></div></div></div></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  3. PARTNER NETWORK                                           -->
+  <!-- ============================================================ -->
+  <div id="suppliers" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Partner Network</h2><span class="section-badge">34 active partners</span></div>
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi-card"><div class="kpi-label">Active Partners</div><div class="kpi-value accent">34</div><div class="kpi-change neutral">across 6 countries</div><div class="kpi-context">Hotels (12) &middot; Transport (8) &middot; Guides (10) &middot; Other (4)</div></div>
+      <div class="kpi-card"><div class="kpi-label">Services Confirmed</div><div class="kpi-value">87%</div><div class="kpi-change up">&#9650; from 81% last month</div><div class="kpi-context"><div class="progress-bar" style="margin-top:6px"><div class="progress-fill green" style="width:87%"></div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Contracts Expiring (30d)</div><div class="kpi-value primary">5</div><div class="kpi-change down">&#9660; Requires renewal</div><div class="kpi-context">2 hotels, 2 transport, 1 guide service</div></div>
+      <div class="kpi-card"><div class="kpi-label">Avg Partner Rating</div><div class="kpi-value accent">4.6</div><div class="kpi-change up">&#9650; 0.2 vs. prior quarter</div><div class="kpi-context">Based on 284 traveler reviews</div></div>
+    </div>
+    <div class="data-table-wrapper">
+      <div class="data-table-header"><span class="data-table-title">Active Partner Directory</span><span class="data-table-count">34 partners</span></div>
+      <table class="data-table">
+        <thead><tr><th>Partner</th><th>Category</th><th>Country</th><th>Active Trips</th><th>Confirmed</th><th>Pending</th><th>Rating</th><th>Contract</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Hotel Monasterio</strong></td><td>Hotel</td><td>Peru</td><td>8</td><td><span class="badge badge-green">7</span></td><td><span class="badge badge-yellow">1</span></td><td>4.8</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td><strong>Patagonia Trails</strong></td><td>Guide</td><td>Argentina</td><td>5</td><td><span class="badge badge-green">5</span></td><td><span class="badge badge-green">0</span></td><td>4.9</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td><strong>Atacama Express</strong></td><td>Transport</td><td>Chile</td><td>6</td><td><span class="badge badge-green">4</span></td><td><span class="badge badge-yellow">2</span></td><td>4.5</td><td><span class="badge badge-yellow">Renewal</span></td></tr>
+          <tr><td><strong>Gal&aacute;pagos Cruises</strong></td><td>Transport</td><td>Ecuador</td><td>4</td><td><span class="badge badge-green">4</span></td><td><span class="badge badge-green">0</span></td><td>4.7</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td><strong>Cusco Heritage</strong></td><td>Guide</td><td>Peru</td><td>7</td><td><span class="badge badge-green">6</span></td><td><span class="badge badge-yellow">1</span></td><td>4.6</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td><strong>Uyuni Salt Lodge</strong></td><td>Hotel</td><td>Bolivia</td><td>3</td><td><span class="badge badge-green">2</span></td><td><span class="badge badge-yellow">1</span></td><td>4.3</td><td><span class="badge badge-yellow">Renewal</span></td></tr>
+          <tr><td><strong>Bogot&aacute; Cultural</strong></td><td>Guide</td><td>Colombia</td><td>2</td><td><span class="badge badge-green">2</span></td><td><span class="badge badge-green">0</span></td><td>4.4</td><td><span class="badge badge-green">Active</span></td></tr>
+          <tr><td><strong>BA Transfers</strong></td><td>Transport</td><td>Argentina</td><td>5</td><td><span class="badge badge-green">3</span></td><td><span class="badge badge-yellow">2</span></td><td>4.2</td><td><span class="badge badge-red">Expired</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  4. TRIP FINANCIAL HEALTH                                     -->
+  <!-- ============================================================ -->
+  <div id="financial" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Trip Financial Health</h2><span class="section-badge">$2.84M pipeline</span></div>
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi-card"><div class="kpi-label">Total Revenue Pipeline</div><div class="kpi-value accent">$2.84M</div><div class="kpi-change up">&#9650; 15% vs. prior quarter</div><div class="kpi-context">$1.92M collected &middot; $920K outstanding</div></div>
+      <div class="kpi-card"><div class="kpi-label">Avg Trip Value</div><div class="kpi-value">$60.4K</div><div class="kpi-change up">&#9650; 8% vs. prior quarter</div><div class="kpi-context">Range: $18K &ndash; $142K per expedition</div></div>
+      <div class="kpi-card"><div class="kpi-label">Collection Rate</div><div class="kpi-value primary">67.6%</div><div class="kpi-change neutral">Target: 80% at T-14d</div><div class="kpi-context"><div class="progress-bar" style="margin-top:6px"><div class="progress-fill primary" style="width:67.6%"></div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Overdue Balances</div><div class="kpi-value primary">$67.4K</div><div class="kpi-change down">&#9660; 8 trips overdue</div><div class="kpi-context">Oldest: 34 days past due &middot; Avg: 12 days</div></div>
+    </div>
+    <div class="dual-col">
+      <div class="kpi-card"><div class="kpi-label">Revenue by Country</div><div class="bar-chart"><div class="bar-col"><div class="bar-value">$1.02M</div><div class="bar accent" style="height:100%"></div><div class="bar-label">Peru</div></div><div class="bar-col"><div class="bar-value">$684K</div><div class="bar primary" style="height:67%"></div><div class="bar-label">Chile</div></div><div class="bar-col"><div class="bar-value">$482K</div><div class="bar accent" style="height:47%"></div><div class="bar-label">Argentina</div></div><div class="bar-col"><div class="bar-value">$398K</div><div class="bar primary" style="height:39%"></div><div class="bar-label">Ecuador</div></div><div class="bar-col"><div class="bar-value">$168K</div><div class="bar teal-light" style="height:16%"></div><div class="bar-label">Colombia</div></div><div class="bar-col"><div class="bar-value">$86K</div><div class="bar teal-light" style="height:8%"></div><div class="bar-label">Bolivia</div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Payment Funnel</div><div class="funnel"><div class="funnel-stage"><span class="funnel-label">Invoiced</span><div class="funnel-bar-container"><div class="funnel-bar" style="width:100%;background:var(--primary)"><span class="funnel-bar-value">$2.84M</span></div></div><span class="funnel-pct">100%</span></div><div class="funnel-stage"><span class="funnel-label">Deposit Paid</span><div class="funnel-bar-container"><div class="funnel-bar" style="width:90%;background:var(--primary-light)"><span class="funnel-bar-value">$847K</span></div></div><span class="funnel-pct">95%</span></div><div class="funnel-stage"><span class="funnel-label">Final Paid</span><div class="funnel-bar-container"><div class="funnel-bar" style="width:68%;background:var(--primary-lighter)"><span class="funnel-bar-value">$1.07M</span></div></div><span class="funnel-pct">68%</span></div><div class="funnel-stage"><span class="funnel-label">Fully Collected</span><div class="funnel-bar-container"><div class="funnel-bar" style="width:56%;background:var(--accent)"><span class="funnel-bar-value">$1.92M</span></div></div><span class="funnel-pct">56%</span></div></div></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  5. TRAVELER EXPERIENCE                                       -->
+  <!-- ============================================================ -->
+  <div id="cx" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Traveler Experience</h2><span class="section-badge">4.7 avg satisfaction</span></div>
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi-card"><div class="kpi-label">Overall Satisfaction</div><div class="kpi-value accent">4.7</div><div class="kpi-change up">&#9650; 0.2 vs. prior quarter</div><div class="kpi-context">Based on 284 post-trip surveys</div></div>
+      <div class="kpi-card"><div class="kpi-label">NPS Score</div><div class="kpi-value primary">+72</div><div class="kpi-change up">&#9650; from +65</div><div class="kpi-context">Promoters: 78% &middot; Passives: 16% &middot; Detractors: 6%</div></div>
+      <div class="kpi-card"><div class="kpi-label">Response Rate</div><div class="kpi-value">68%</div><div class="kpi-change neutral">target: 70%</div><div class="kpi-context"><div class="progress-bar" style="margin-top:6px"><div class="progress-fill accent" style="width:68%"></div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Repeat Bookings</div><div class="kpi-value accent">34%</div><div class="kpi-change up">&#9650; 6% vs. prior year</div><div class="kpi-context">47 returning travelers out of 138</div></div>
+    </div>
+    <div class="dual-col">
+      <div class="kpi-card"><div class="kpi-label">Satisfaction by Category</div><div class="bar-chart"><div class="bar-col"><div class="bar-value">4.9</div><div class="bar accent" style="height:98%"></div><div class="bar-label">Guides</div></div><div class="bar-col"><div class="bar-value">4.7</div><div class="bar primary" style="height:94%"></div><div class="bar-label">Hotels</div></div><div class="bar-col"><div class="bar-value">4.5</div><div class="bar primary" style="height:90%"></div><div class="bar-label">Transport</div></div><div class="bar-col"><div class="bar-value">4.8</div><div class="bar accent" style="height:96%"></div><div class="bar-label">Itinerary</div></div><div class="bar-col"><div class="bar-value">4.6</div><div class="bar teal-light" style="height:92%"></div><div class="bar-label">Food</div></div><div class="bar-col"><div class="bar-value">4.3</div><div class="bar teal-light" style="height:86%"></div><div class="bar-label">Comms</div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Feedback Sentiment (Last 90 Days)</div><div class="donut-wrapper"><div class="donut-chart" style="background:conic-gradient(var(--green) 0% 78%,var(--accent) 78% 94%,var(--red) 94% 100%)"><div class="donut-center"><div class="donut-center-value">284</div><div class="donut-center-label">Reviews</div></div></div><div class="donut-legend"><div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Positive &mdash; 221 (78%)</div><div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Neutral &mdash; 45 (16%)</div><div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Negative &mdash; 18 (6%)</div></div></div></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  6. EXPEDITION READINESS                                      -->
+  <!-- ============================================================ -->
+  <div id="readiness" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Expedition Readiness</h2><span class="section-badge">28 ready &middot; 13 at risk &middot; 6 critical</span></div>
+    <div class="hero-moment">
+      <div class="hero-gauge-area">
+        <div class="gauge-ring"><svg viewBox="0 0 140 140"><circle class="gauge-track" cx="70" cy="70" r="60"/><circle class="gauge-fill pulse" cx="70" cy="70" r="60"/></svg><div class="gauge-center"><div class="gauge-score">78%</div><div class="gauge-label-main">Composite</div><div class="gauge-sublabel">Weighted readiness score</div></div></div>
+      </div>
+      <div class="hero-moment-body">
+        <div class="hero-moment-title">Scoring Weights</div>
+        <div class="hero-moment-subtitle">How each dimension contributes to the composite readiness score</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+          <div class="weight-card"><div class="weight-pct">30%</div><div class="weight-label">Services</div><div class="weight-desc">Hotels, transport, guides confirmed</div></div>
+          <div class="weight-card"><div class="weight-pct">20%</div><div class="weight-label">Flights</div><div class="weight-desc">All flights booked &amp; confirmed</div></div>
+          <div class="weight-card"><div class="weight-pct">20%</div><div class="weight-label">Payments</div><div class="weight-desc">Deposits &amp; final payments collected</div></div>
+          <div class="weight-card"><div class="weight-pct">15%</div><div class="weight-label">Registration</div><div class="weight-desc">All travelers registered</div></div>
+          <div class="weight-card"><div class="weight-pct">15%</div><div class="weight-label">Documents</div><div class="weight-desc">Passports, visas, medicals</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="dual-col">
+      <div class="kpi-card"><div class="kpi-label">Readiness by Status</div><div class="donut-wrapper"><div class="donut-chart" style="background:conic-gradient(var(--green) 0% 59.6%,var(--accent) 59.6% 87.2%,var(--red) 87.2% 100%)"><div class="donut-center"><div class="donut-center-value">47</div><div class="donut-center-label">Trips</div></div></div><div class="donut-legend"><div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Ready &mdash; 28 (59.6%)</div><div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> At Risk &mdash; 13 (27.7%)</div><div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Critical &mdash; 6 (12.8%)</div></div></div></div>
+      <div class="kpi-card"><div class="kpi-label">Departure Urgency</div><div style="display:flex;gap:12px;margin-top:16px"><div class="threshold-card threshold-red"><div class="threshold-value">6</div><div class="threshold-status">&le; 7 days</div><div class="threshold-desc">Immediate action</div></div><div class="threshold-card threshold-yellow"><div class="threshold-value">11</div><div class="threshold-status">&le; 14 days</div><div class="threshold-desc">This week priority</div></div><div class="threshold-card threshold-green"><div class="threshold-value">19</div><div class="threshold-status">&le; 30 days</div><div class="threshold-desc">On track</div></div></div></div>
+    </div>
+    <div class="trip-cards">
+      <div class="trip-card critical"><div class="trip-card-header"><div><div class="trip-id">CUS-2026-003</div><div class="trip-name">Sacred Valley &amp; Machu Picchu</div><div class="trip-dates">Jun 25 &ndash; Jul 4, 2026</div><div class="trip-travelers">12 travelers &middot; Peru</div></div><span class="badge badge-red"><span class="badge-dot"></span>Critical</span></div><div class="trip-metrics"><div><div class="trip-metric-label">Readiness</div><div class="trip-metric-value" style="color:var(--red)">52%</div></div><div><div class="trip-metric-label">Days Out</div><div class="trip-metric-value">5</div></div><div><div class="trip-metric-label">Blocks</div><div class="trip-metric-value" style="color:var(--red)">3</div></div></div></div>
+      <div class="trip-card at-risk"><div class="trip-card-header"><div><div class="trip-id">ATC-2026-007</div><div class="trip-name">Atacama Desert Expedition</div><div class="trip-dates">Jul 8 &ndash; Jul 16, 2026</div><div class="trip-travelers">8 travelers &middot; Chile</div></div><span class="badge badge-yellow"><span class="badge-dot"></span>At Risk</span></div><div class="trip-metrics"><div><div class="trip-metric-label">Readiness</div><div class="trip-metric-value" style="color:var(--accent)">71%</div></div><div><div class="trip-metric-label">Days Out</div><div class="trip-metric-value">18</div></div><div><div class="trip-metric-label">Blocks</div><div class="trip-metric-value" style="color:var(--accent)">2</div></div></div></div>
+      <div class="trip-card ready"><div class="trip-card-header"><div><div class="trip-id">BA-2026-012</div><div class="trip-name">Buenos Aires &amp; NW Argentina</div><div class="trip-dates">Jul 22 &ndash; Aug 2, 2026</div><div class="trip-travelers">15 travelers &middot; Argentina</div></div><span class="badge badge-green"><span class="badge-dot"></span>Ready</span></div><div class="trip-metrics"><div><div class="trip-metric-label">Readiness</div><div class="trip-metric-value" style="color:var(--green)">96%</div></div><div><div class="trip-metric-label">Days Out</div><div class="trip-metric-value">32</div></div><div><div class="trip-metric-label">Blocks</div><div class="trip-metric-value" style="color:var(--green)">0</div></div></div></div>
+      <div class="trip-card ready"><div class="trip-card-header"><div><div class="trip-id">QTO-2026-004</div><div class="trip-name">Gal&aacute;pagos Islands Explorer</div><div class="trip-dates">Aug 10 &ndash; Aug 20, 2026</div><div class="trip-travelers">6 travelers &middot; Ecuador</div></div><span class="badge badge-green"><span class="badge-dot"></span>Ready</span></div><div class="trip-metrics"><div><div class="trip-metric-label">Readiness</div><div class="trip-metric-value" style="color:var(--green)">100%</div></div><div><div class="trip-metric-label">Days Out</div><div class="trip-metric-value">51</div></div><div><div class="trip-metric-label">Blocks</div><div class="trip-metric-value" style="color:var(--green)">0</div></div></div></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  7. RISK INTELLIGENCE                                         -->
+  <!-- ============================================================ -->
+  <div id="risk" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Risk Intelligence</h2><span class="section-badge">3 high &middot; 7 medium &middot; 12 low</span></div>
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi-card"><div class="kpi-label">High Risk Flags</div><div class="kpi-value primary">3</div><div class="kpi-change down">&#9660; Requires immediate action</div><div class="kpi-context">Document expiries, payment defaults, flight cancellations</div></div>
+      <div class="kpi-card"><div class="kpi-label">Medium Risk</div><div class="kpi-value accent">7</div><div class="kpi-change neutral">Monitor within 48 hours</div><div class="kpi-context">Pending confirmations, delayed responses</div></div>
+      <div class="kpi-card"><div class="kpi-label">Low Risk</div><div class="kpi-value">12</div><div class="kpi-change neutral">Auto-monitored</div><div class="kpi-context">Minor gaps, seasonal advisories</div></div>
+      <div class="kpi-card"><div class="kpi-label">Avg Resolution Time</div><div class="kpi-value accent">1.8d</div><div class="kpi-change up">&#9650; Improved from 2.4d</div><div class="kpi-context">Mean time to resolve risk flags</div></div>
+    </div>
+    <div class="risk-panel">
+      <div class="risk-panel-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>High Priority Risks</div>
+      <div class="risk-item"><div class="risk-indicator red"></div><div class="risk-content"><div class="risk-text">CUS-2026-003: Passport expired &mdash; Kenji Tanaka</div><div class="risk-detail">Trip departs in 5 days. Passport renewal in progress but may not arrive in time.</div></div><button class="risk-action">Escalate</button></div>
+      <div class="risk-item"><div class="risk-indicator red"></div><div class="risk-content"><div class="risk-text">BGT-2026-002: Final payment overdue &mdash; 34 days</div><div class="risk-detail">$12,400 outstanding. 3 payment reminders sent. No response since May 17.</div></div><button class="risk-action">Contact</button></div>
+      <div class="risk-item"><div class="risk-indicator red"></div><div class="risk-content"><div class="risk-text">ATC-2026-007: Flight confirmation pending &mdash; 2 travelers</div><div class="risk-detail">SCL-PUQ segment. Airline holding but not confirmed. Departs in 18 days.</div></div><button class="risk-action">Follow Up</button></div>
+    </div>
+    <div class="risk-panel">
+      <div class="risk-panel-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Medium Priority Risks</div>
+      <div class="risk-item"><div class="risk-indicator yellow"></div><div class="risk-content"><div class="risk-text">BA-2026-012: Hotel confirmation delayed &mdash; Alvear Palace</div><div class="risk-detail">Deposit paid but contract not yet countersigned. Follow up scheduled for tomorrow.</div></div><button class="risk-action">Monitor</button></div>
+      <div class="risk-item"><div class="risk-indicator yellow"></div><div class="risk-content"><div class="risk-text">PTG-2026-009: Medical form missing &mdash; Sofia Fern&aacute;ndez (age 8)</div><div class="risk-detail">Parent contacted via email and WhatsApp. Trip departs in 28 days.</div></div><button class="risk-action">Follow Up</button></div>
+      <div class="risk-item"><div class="risk-indicator yellow"></div><div class="risk-content"><div class="risk-text">QTO-2026-004: Travel advisory &mdash; Ecuador political situation</div><div class="risk-detail">Currently no disruption to itinerary. Monitoring daily. Next assessment in 72 hours.</div></div><button class="risk-action">Watch</button></div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  8. DATA MODEL & DAX                                          -->
+  <!-- ============================================================ -->
+  <div id="datamodel" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Data Model &amp; DAX Measures</h2><span class="section-badge">7 tables &middot; 28 measures</span></div>
+    <div class="relationships-panel">
+      <div class="risk-panel-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8.59 13.51l6.83 6.83"/><circle cx="18" cy="6" r="3"/><path d="M8.59 10.49l6.83-6.83"/></svg>Table Relationships</div>
+      <div class="rel-item"><span class="rel-from">DimTravelers</span><span class="rel-arrow">&rarr;</span><span class="rel-to">FactTripParticipants</span><span class="rel-type">1:Many &middot; TravelerID</span></div>
+      <div class="rel-item"><span class="rel-from">DimTrips</span><span class="rel-arrow">&rarr;</span><span class="rel-to">FactTripParticipants</span><span class="rel-type">1:Many &middot; TripID</span></div>
+      <div class="rel-item"><span class="rel-from">DimDestinations</span><span class="rel-arrow">&rarr;</span><span class="rel-to">DimTrips</span><span class="rel-type">1:Many &middot; DestinationID</span></div>
+      <div class="rel-item"><span class="rel-from">DimPartners</span><span class="rel-arrow">&rarr;</span><span class="rel-to">FactPartnerServices</span><span class="rel-type">1:Many &middot; PartnerID</span></div>
+      <div class="rel-item"><span class="rel-from">DimTrips</span><span class="rel-arrow">&rarr;</span><span class="rel-to">FactPartnerServices</span><span class="rel-type">1:Many &middot; TripID</span></div>
+      <div class="rel-item"><span class="rel-from">DimTrips</span><span class="rel-arrow">&rarr;</span><span class="rel-to">FactPayments</span><span class="rel-type">1:Many &middot; TripID</span></div>
+      <div class="rel-item"><span class="rel-from">DimTravelers</span><span class="rel-arrow">&rarr;</span><span class="rel-to">FactDocuments</span><span class="rel-type">1:Many &middot; TravelerID</span></div>
+    </div>
+    <div class="model-grid">
+      <div class="model-table"><div class="model-table-header"><span class="model-table-name">DimTrips</span><span class="model-table-type">Dimension</span></div><div class="model-field"><div class="field-left"><span class="field-name">TripID</span><span class="field-key">PK</span></div><span class="field-type">text</span></div><div class="model-field"><span class="field-name">TripName</span><span class="field-type">text</span></div><div class="model-field"><div class="field-left"><span class="field-name">DestinationID</span><span class="field-fk">FK</span></div><span class="field-type">text</span></div><div class="model-field"><span class="field-name">DepartureDate</span><span class="field-type">date</span></div><div class="model-field"><span class="field-name">ReturnDate</span><span class="field-type">date</span></div><div class="model-field"><span class="field-name">Status</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">ReadinessScore</span><span class="field-type">decimal</span></div><div class="model-field"><span class="field-name">TotalValue</span><span class="field-type">currency</span></div></div>
+      <div class="model-table"><div class="model-table-header"><span class="model-table-name">DimTravelers</span><span class="model-table-type">Dimension</span></div><div class="model-field"><div class="field-left"><span class="field-name">TravelerID</span><span class="field-key">PK</span></div><span class="field-type">text</span></div><div class="model-field"><span class="field-name">FullName</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Email</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Phone</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Nationality</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Type</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">DateOfBirth</span><span class="field-type">date</span></div></div>
+      <div class="model-table"><div class="model-table-header"><span class="model-table-name">DimDestinations</span><span class="model-table-type">Dimension</span></div><div class="model-field"><div class="field-left"><span class="field-name">DestinationID</span><span class="field-key">PK</span></div><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Country</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">City</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Region</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Coordinates</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">ClimateZone</span><span class="field-type">text</span></div></div>
+    </div>
+    <div class="model-grid">
+      <div class="model-table"><div class="model-table-header"><span class="model-table-name">FactTripParticipants</span><span class="model-table-type">Fact</span></div><div class="model-field"><div class="field-left"><span class="field-name">TripID</span><span class="field-fk">FK</span></div><span class="field-type">text</span></div><div class="model-field"><div class="field-left"><span class="field-name">TravelerID</span><span class="field-fk">FK</span></div><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Role</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">RegistrationDate</span><span class="field-type">date</span></div><div class="model-field"><span class="field-name">AmountDue</span><span class="field-type">currency</span></div><div class="model-field"><span class="field-name">AmountPaid</span><span class="field-type">currency</span></div></div>
+      <div class="model-table"><div class="model-table-header"><span class="model-table-name">FactPayments</span><span class="model-table-type">Fact</span></div><div class="model-field"><span class="field-name">PaymentID</span><span class="field-type">text</span></div><div class="model-field"><div class="field-left"><span class="field-name">TripID</span><span class="field-fk">FK</span></div><span class="field-type">text</span></div><div class="model-field"><span class="field-name">PaymentDate</span><span class="field-type">date</span></div><div class="model-field"><span class="field-name">Amount</span><span class="field-type">currency</span></div><div class="model-field"><span class="field-name">Method</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">Status</span><span class="field-type">text</span></div></div>
+      <div class="model-table"><div class="model-table-header"><span class="model-table-name">FactPartnerServices</span><span class="model-table-type">Fact</span></div><div class="model-field"><div class="field-left"><span class="field-name">PartnerID</span><span class="field-fk">FK</span></div><span class="field-type">text</span></div><div class="model-field"><div class="field-left"><span class="field-name">TripID</span><span class="field-fk">FK</span></div><span class="field-type">text</span></div><div class="model-field"><span class="field-name">ServiceType</span><span class="field-type">text</span></div><div class="model-field"><span class="field-name">ConfirmDate</span><span class="field-type">date</span></div><div class="model-field"><span class="field-name">Cost</span><span class="field-type">currency</span></div><div class="model-field"><span class="field-name">Status</span><span class="field-type">text</span></div></div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Key DAX Measures</h2></div>
+    <div class="dax-block"><div class="dax-header"><span class="dax-name">Expedition Readiness Score</span><span class="dax-type">Measure</span></div><div class="dax-code"><span class="dax-keyword">VAR</span> _serviceScore = <span class="dax-function">CALCULATE</span>(<span class="dax-function">DIVIDE</span>(<span class="dax-function">COUNTROWS</span>(<span class="dax-function">FILTER</span>(FactPartnerServices, [Status] = <span class="dax-string">"Confirmed"</span>)),<span class="dax-function">COUNTROWS</span>(FactPartnerServices))) * <span class="dax-number">100</span>
+<span class="dax-keyword">VAR</span> _flightScore = <span class="dax-function">CALCULATE</span>(<span class="dax-function">DIVIDE</span>(<span class="dax-function">COUNTROWS</span>(<span class="dax-function">FILTER</span>(DimTravelers, [FlightStatus] = <span class="dax-string">"Confirmed"</span>)),<span class="dax-function">COUNTROWS</span>(DimTravelers))) * <span class="dax-number">100</span>
+<span class="dax-keyword">VAR</span> _paymentScore = <span class="dax-function">DIVIDE</span>([TotalPaid], [TotalDue]) * <span class="dax-number">100</span>
+<span class="dax-keyword">VAR</span> _docScore = <span class="dax-function">CALCULATE</span>(<span class="dax-function">DIVIDE</span>(<span class="dax-function">COUNTROWS</span>(<span class="dax-function">FILTER</span>(FactDocuments, [Complete] = <span class="dax-keyword">TRUE</span>())),<span class="dax-function">COUNTROWS</span>(FactDocuments))) * <span class="dax-number">100</span>
+<span class="dax-keyword">RETURN</span> _serviceScore * <span class="dax-number">0.30</span> + _flightScore * <span class="dax-number">0.20</span> + _paymentScore * <span class="dax-number">0.20</span> + _docScore * <span class="dax-number">0.15</span> + (<span class="dax-function">DIVIDE</span>([RegisteredTravelers],[ExpectedTravelers]) * <span class="dax-number">100</span>) * <span class="dax-number">0.15</span></div></div>
+    <div class="dax-block"><div class="dax-header"><span class="dax-name">Readiness Status</span><span class="dax-type">Measure</span></div><div class="dax-code"><span class="dax-keyword">SWITCH</span>(<span class="dax-keyword">TRUE</span>(),[Expedition Readiness Score] >= <span class="dax-number">90</span>, <span class="dax-string">"Ready"</span>,[Expedition Readiness Score] >= <span class="dax-number">70</span>, <span class="dax-string">"At Risk"</span>,<span class="dax-string">"Critical"</span>)</div></div>
+    <div class="dax-block"><div class="dax-header"><span class="dax-name">Days Until Departure</span><span class="dax-type">Measure</span></div><div class="dax-code"><span class="dax-function">DATEDIFF</span>(<span class="dax-function">TODAY</span>(), <span class="dax-function">MAX</span>(DimTrips[DepartureDate]), <span class="dax-string">DAY</span>)</div></div>
+    <div class="dax-block"><div class="dax-header"><span class="dax-name">Outstanding Balance</span><span class="dax-type">Measure</span></div><div class="dax-code"><span class="dax-keyword">VAR</span> _totalDue = <span class="dax-function">SUM</span>(FactTripParticipants[AmountDue])
+<span class="dax-keyword">VAR</span> _totalPaid = <span class="dax-function">SUM</span>(FactTripParticipants[AmountPaid])
+<span class="dax-keyword">RETURN</span> _totalDue - _totalPaid</div></div>
+    <div class="dax-block"><div class="dax-header"><span class="dax-name">Revenue Pipeline</span><span class="dax-type">Measure</span></div><div class="dax-code"><span class="dax-function">CALCULATE</span>(<span class="dax-function">SUMX</span>(DimTrips, DimTrips[TotalValue]),DimTrips[Status] <span class="dax-keyword">IN</span> { <span class="dax-string">"Active"</span>, <span class="dax-string">"Upcoming"</span> })</div></div>
+    <div class="dax-block"><div class="dax-header"><span class="dax-name">Collection Rate %</span><span class="dax-type">Measure</span></div><div class="dax-code"><span class="dax-function">DIVIDE</span>(<span class="dax-function">SUM</span>(FactPayments[Amount]),<span class="dax-function">SUM</span>(FactTripParticipants[AmountDue]),<span class="dax-number">0</span>) * <span class="dax-number">100</span></div></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  9. KPI CATALOG                                               -->
+  <!-- ============================================================ -->
+  <div id="kpis" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>KPI Catalog</h2><span class="section-badge">42 KPIs defined</span></div>
+    <div class="data-table-wrapper">
+      <div class="data-table-header"><span class="data-table-title">Complete KPI Definitions</span><span class="data-table-count">42 measures</span></div>
+      <table class="data-table">
+        <thead><tr><th>KPI Name</th><th>Category</th><th>Formula / Logic</th><th>Target</th><th>Current</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Expedition Readiness Score</strong></td><td>Operations</td><td>Weighted: Services 30% + Flights 20% + Payments 20% + Registration 15% + Docs 15%</td><td>&ge; 90%</td><td><span class="badge badge-yellow">78%</span></td><td>DAX Measure</td></tr>
+          <tr><td><strong>Total Active Expeditions</strong></td><td>Volume</td><td>COUNTROWS(DimTrips WHERE Status = "Active")</td><td>&mdash;</td><td><span class="badge badge-blue">47</span></td><td>DimTrips</td></tr>
+          <tr><td><strong>Travelers in Pipeline</strong></td><td>Volume</td><td>DISTINCTCOUNT(FactTripParticipants[TravelerID])</td><td>&mdash;</td><td><span class="badge badge-blue">138</span></td><td>FactTripParticipants</td></tr>
+          <tr><td><strong>Revenue Pipeline</strong></td><td>Financial</td><td>SUMX(DimTrips, TotalValue) WHERE Status IN {"Active","Upcoming"}</td><td>&ge; $2.5M</td><td><span class="badge badge-green">$2.84M</span></td><td>DimTrips</td></tr>
+          <tr><td><strong>Outstanding Balance</strong></td><td>Financial</td><td>SUM(AmountDue) - SUM(AmountPaid)</td><td>&le; $500K</td><td><span class="badge badge-yellow">$920K</span></td><td>FactTripParticipants</td></tr>
+          <tr><td><strong>Collection Rate %</strong></td><td>Financial</td><td>DIVIDE(SUM(Payments.Amount), SUM(AmountDue)) &times; 100</td><td>&ge; 80%</td><td><span class="badge badge-yellow">67.6%</span></td><td>FactPayments</td></tr>
+          <tr><td><strong>Overdue Balance Count</strong></td><td>Financial</td><td>COUNTROWS(FactPayments WHERE Status = "Overdue")</td><td>0</td><td><span class="badge badge-red">8</span></td><td>FactPayments</td></tr>
+          <tr><td><strong>Service Confirmation Rate</strong></td><td>Partners</td><td>DIVIDE(ConfirmedServices, TotalServices) &times; 100</td><td>&ge; 95%</td><td><span class="badge badge-yellow">87%</span></td><td>FactPartnerServices</td></tr>
+          <tr><td><strong>Document Completion Rate</strong></td><td>Travelers</td><td>DIVIDE(CompleteDocuments, TotalDocuments) &times; 100</td><td>&ge; 95%</td><td><span class="badge badge-yellow">89%</span></td><td>FactDocuments</td></tr>
+          <tr><td><strong>Flight Confirmation Rate</strong></td><td>Travelers</td><td>DIVIDE(ConfirmedFlights, TotalFlights) &times; 100</td><td>&ge; 95%</td><td><span class="badge badge-yellow">74%</span></td><td>DimTravelers</td></tr>
+          <tr><td><strong>NPS Score</strong></td><td>Experience</td><td>%Promoters - %Detractors</td><td>&ge; +60</td><td><span class="badge badge-green">+72</span></td><td>FactFeedback</td></tr>
+          <tr><td><strong>Avg Satisfaction</strong></td><td>Experience</td><td>AVERAGE(FactFeedback[Rating])</td><td>&ge; 4.5</td><td><span class="badge badge-green">4.7</span></td><td>FactFeedback</td></tr>
+          <tr><td><strong>Repeat Booking Rate</strong></td><td>Experience</td><td>DIVIDE(ReturningTravelers, TotalTravelers) &times; 100</td><td>&ge; 30%</td><td><span class="badge badge-green">34%</span></td><td>DimTravelers</td></tr>
+          <tr><td><strong>Days Until Departure</strong></td><td>Operations</td><td>DATEDIFF(TODAY(), MAX(DepartureDate), DAY)</td><td>&gt; 14</td><td><span class="badge badge-blue">Varies</span></td><td>DimTrips</td></tr>
+          <tr><td><strong>Avg Resolution Time</strong></td><td>Risk</td><td>AVERAGE(DATEDIFF(FlagDate, ResolvedDate, DAY))</td><td>&le; 2 days</td><td><span class="badge badge-green">1.8d</span></td><td>FactRiskFlags</td></tr>
+          <tr><td><strong>High Risk Flags</strong></td><td>Risk</td><td>COUNTROWS(FactRiskFlags WHERE Severity = "High")</td><td>0</td><td><span class="badge badge-red">3</span></td><td>FactRiskFlags</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  10. VISUAL BLUEPRINT                                         -->
+  <!-- ============================================================ -->
+  <div id="visuals" class="section">
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Visual Blueprint</h2><span class="section-badge">12 visuals recommended</span></div>
+    <div class="visual-rec-grid">
+      <div class="visual-rec-card"><div class="visual-rec-type">Gauge / Scorecard</div><div class="visual-rec-kpi">Expedition Readiness Score</div><div class="visual-rec-rationale">Single KPI with color-coded arc. Green &ge;90, yellow 70&ndash;89, red &lt;70. Provides instant operational health at a glance.</div><div class="visual-rec-config"><span class="config-tag">Gauge visual</span><span class="config-tag">Conditional fill</span><span class="config-tag">Target: 90</span></div></div>
+      <div class="visual-rec-card"><div class="visual-rec-type">Choropleth Map</div><div class="visual-rec-kpi">Expeditions by Country</div><div class="visual-rec-rationale">South America map shaded by expedition density. Drill from country to city to individual trip. Shows geographic concentration instantly.</div><div class="visual-rec-config"><span class="config-tag">Map visual</span><span class="config-tag">Drill-down</span><span class="config-tag">Tooltip: 3 metrics</span></div></div>
+      <div class="visual-rec-card"><div class="visual-rec-type">Stacked Column</div><div class="visual-rec-kpi">Readiness by Status Over Time</div><div class="visual-rec-rationale">Weekly trend showing Ready/At Risk/Critical split. Reveals whether operational posture is improving or degrading ahead of departure waves.</div><div class="visual-rec-config"><span class="config-tag">Stacked bar</span><span class="config-tag">3 series</span><span class="config-tag">Weekly axis</span></div></div>
+      <div class="visual-rec-card"><div class="visual-rec-type">Matrix / Table</div><div class="visual-rec-kpi">Trip Detail Matrix</div><div class="visual-rec-rationale">Expandable matrix with trip-level drill. Conditional formatting on each readiness dimension. Supports action-taking from within the report.</div><div class="visual-rec-config"><span class="config-tag">Matrix visual</span><span class="config-tag">Conditional formatting</span><span class="config-tag">Drill-through</span></div></div>
+      <div class="visual-rec-card"><div class="visual-rec-type">Donut Chart</div><div class="visual-rec-kpi">Payment Funnel</div><div class="visual-rec-rationale">Concentric donut showing pipeline stages: invoiced &rarr; deposit &rarr; final &rarr; collected. Quick visual of revenue conversion.</div><div class="visual-rec-config"><span class="config-tag">Donut</span><span class="config-tag">Center label</span><span class="config-tag">4 rings</span></div></div>
+      <div class="visual-rec-card"><div class="visual-rec-type">Card Row</div><div class="visual-rec-kpi">Departure Countdown</div><div class="visual-rec-rationale">Four cards: departures in 7d, 14d, 30d, and total active. Color-coded urgency. Triggers immediate prioritization of operations team focus.</div><div class="visual-rec-config"><span class="config-tag">Multi-card</span><span class="config-tag">Conditional color</span><span class="config-tag">Icon: calendar</span></div></div>
+      <div class="visual-rec-card"><div class="visual-rec-type">Horizontal Bar</div><div class="visual-rec-kpi">Country Revenue</div><div class="visual-rec-rationale">Sorted bar chart comparing revenue by destination country. Highlights Peru and Chile as primary markets with Bolivia as growth opportunity.</div><div class="visual-rec-config"><span class="config-tag">Bar chart</span><span class="config-tag">Sorted desc</span><span class="config-tag">Data labels</span></div></div>
+      <div class="visual-rec-card"><div class="visual-rec-type">Timeline / Gantt</div><div class="visual-rec-kpi">Expedition Timeline</div><div class="visual-rec-rationale">Horizontal timeline showing all 47 active expeditions positioned by departure date. Color-coded by readiness status for at-a-glance planning.</div><div class="visual-rec-config"><span class="config-tag">Gantt</span><span class="config-tag">Today line</span><span class="config-tag">Color: status</span></div></div>
+      <div class="visual-rec-card"><div class="visual-rec-type">Heatmap</div><div class="visual-rec-kpi">Partner Confirmation Heatmap</div><div class="visual-rec-rationale">Grid: partners &times; trips. Each cell = confirmed/pending/missing. Quickly identifies which partners are bottlenecks across multiple expeditions.</div><div class="visual-rec-config"><span class="config-tag">Matrix</span><span class="config-tag">Cell icons</span><span class="config-tag">Heat colors</span></div></div>
+    </div>
+    <div class="section-divider"></div>
+    <div class="section-header"><h2 class="section-title"><span class="title-line"></span>Design Philosophy</h2></div>
+    <div class="rationale-block">
+      <div class="rationale-title">Why This Dashboard Works for Expedition Operations</div>
+      <p class="rationale-text">This platform was designed around a fundamental insight: expedition operators don't manage trips in isolation &mdash; they orchestrate dozens of concurrent journeys across multiple countries, each with its own supply chain, regulatory requirements, and traveler mix.</p>
+      <p class="rationale-text">The Readiness Score is the north star metric because it distills operational complexity into a single, actionable number. Unlike generic project management scores, this one is weighted by what actually matters in travel operations: service confirmations carry 30% weight because a trip cannot run without confirmed hotels, guides, and transport.</p>
+      <ul class="rationale-list">
+        <li>Every visual supports a specific operational decision, not just information display</li>
+        <li>Color follows traffic-light semantics that operations teams already use instinctively</li>
+        <li>The departure countdown creates urgency without alarm &mdash; &ldquo;6 trips depart within 7 days&rdquo; tells you exactly where to focus today</li>
+        <li>Financial metrics are embedded alongside operational ones because cash flow drives service confirmation capacity</li>
+        <li>The network diagram shows operational relationships that spreadsheets cannot &mdash; seeing which hubs connect to which destinations triggers proactive supplier outreach</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active')});
+  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active')});
+  var el=document.getElementById(id);
+  if(el)el.classList.add('active');
+  if(btn)btn.classList.add('active');
+  window.scrollTo({top:260,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
